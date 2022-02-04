@@ -6,13 +6,14 @@
 
 declare(strict_types=1);
 
-namespace ExampleNamespace;
+namespace tkempf\Webtrees\AutoCompletePlaceLocation;
 
 use Fisharebest\Localization\Translation;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
+use Fisharebest\Webtrees\Module\ModuleMapAutocompleteInterface;
 
 /**
  * Class ExampleModule
@@ -22,10 +23,10 @@ use Fisharebest\Webtrees\Module\ModuleCustomTrait;
  *
  * Modules *must* implement ModuleCustomInterface.  They *may* also implement other interfaces.
  */
-class ExampleModule extends AbstractModule implements ModuleCustomInterface
+class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomInterface,ModuleMapAutocompleteInterface
 {
     // For every module interface that is implemented, the corresponding trait *should* also use be used.
-    use ModuleCustomTrait;
+    use ModuleCustomTrait,ModuleMapAutocompleteInterface;
 
     /**
      * The constructor is called on all modules, even ones that are disabled.
@@ -54,7 +55,7 @@ class ExampleModule extends AbstractModule implements ModuleCustomInterface
      */
     public function title(): string
     {
-        return I18N::translate('Example module');
+        return I18N::translate('AutoCompletePlaceLocation');
     }
 
     /**
@@ -74,7 +75,7 @@ class ExampleModule extends AbstractModule implements ModuleCustomInterface
      */
     public function customModuleAuthorName(): string
     {
-        return 'Greg Roach';
+        return 'Thomas Kempf';
     }
 
     /**
@@ -84,7 +85,7 @@ class ExampleModule extends AbstractModule implements ModuleCustomInterface
      */
     public function customModuleVersion(): string
     {
-        return '1.0.0';
+        return '0.1.0';
     }
 
     /**
@@ -104,7 +105,7 @@ class ExampleModule extends AbstractModule implements ModuleCustomInterface
      */
     public function customModuleSupportUrl(): string
     {
-        return 'https://github.com/webtrees/example-module';
+        return 'https://github.com/tkempf/autocompleteplacelocation';
     }
 
     /**
@@ -152,4 +153,13 @@ class ExampleModule extends AbstractModule implements ModuleCustomInterface
                 return [];
         }
     }
+    /**
+     * @param string $place
+     *
+     * @return array<string>
+     */
+    public function searchPlaceNames(string $place):array{
+        return[];
+    }
+
 }

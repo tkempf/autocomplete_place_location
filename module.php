@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-namespace ExampleNamespace;
+namespace tkempf\Webtrees\AutoCompletePlaceLocation;
 
-require __DIR__ . '/ExampleModule.php';
+require __DIR__ . '/AutoCompletePlaceLocation.php';
 
 // This script must return an object that implements ModuleCustomInterface.
 // If the module's constructor does not take any parameters, you can simply instantiate it.
@@ -17,4 +17,4 @@ require __DIR__ . '/ExampleModule.php';
 // return Webtrees::make(ExampleModule::class);
 // For an example, see the server-config module.
 
-return new ExampleModule();
+return new AutoCompletePlaceLocation();
