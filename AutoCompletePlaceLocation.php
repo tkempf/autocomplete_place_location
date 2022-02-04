@@ -7,7 +7,6 @@
 declare(strict_types=1);
 
 namespace tkempf\Webtrees\AutoCompletePlaceLocation;
-
 use Fisharebest\Localization\Translation;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\AbstractModule;
@@ -55,7 +54,7 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
      */
     public function title(): string
     {
-        return I18N::translate('AutoCompletePlaceLocation');
+        return I18N::translate('AutoComplete places via PlaceLocation');
     }
 
     /**
@@ -65,7 +64,7 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
      */
     public function description(): string
     {
-        return I18N::translate('This module does not do anything');
+        return I18N::translate('Allows autocomplete for places to search in place_location table');
     }
 
     /**
@@ -95,7 +94,7 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
      */
     public function customModuleLatestVersionUrl(): string
     {
-        return 'https://github.com/webtrees/example-module/raw/main/latest-version.txt';
+        return 'https://github.com/tkempf/autocomplete_place_location/raw/main/latest-version.txt';
     }
 
     /**
@@ -105,7 +104,7 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
      */
     public function customModuleSupportUrl(): string
     {
-        return 'https://github.com/tkempf/autocompleteplacelocation';
+        return 'https://github.com/tkempf/autocomplete_place_location';
     }
 
     /**
@@ -118,30 +117,12 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
     public function customTranslations(string $language): array
     {
         switch ($language) {
-            case 'en-AU':
-            case 'en-GB':
-            case 'en-US':
-                // Note the special characters used in plural and context-sensitive translations.
-                return [
-                    'Individual'                                      => 'Fish',
-                    'Individuals'                                     => 'Fishes',
-                    '%s individual' . I18N::PLURAL . '%s individuals' => '%s fish' . I18N::PLURAL . '%s fishes',
-                    'Unknown given name' . I18N::CONTEXT . '…'        => '?fish?',
-                    'Unknown surname' . I18N::CONTEXT . '…'           => '?FISH?',
-                ];
-
-            case 'fr':
-            case 'fr-CA':
+            case 'de':
+            case 'de-DE':
                 return [
                     // These are new translations:
-                    'Example module'                                  => 'Exemple module',
-                    'This module does not do anything'                => 'Ce module ne fait rien',
-                    // These are updates to existing translations:
-                    'Individual'                                      => 'Poisson',
-                    'Individuals'                                     => 'Poissons',
-                    '%s individual' . I18N::PLURAL . '%s individuals' => '%s poisson' . I18N::PLURAL . '%s poissons',
-                    'Unknown given name' . I18N::CONTEXT . '…'        => '?poission?',
-                    'Unknown surname' . I18N::CONTEXT . '…'           => '?POISSON?',
+                    'AutoComplete places via PlaceLocation'                                  => 'AutoComplete places via PlaceLocation',
+                    'enables autocompletion for places to search in place_location table'    => 'Ermöglicht Autovervollständigung der Orte aus der place_location Tabelle',
                 ];
 
             case 'some-other-language':
