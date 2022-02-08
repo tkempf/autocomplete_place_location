@@ -7,12 +7,21 @@
 declare(strict_types=1);
 
 namespace tkempf\Webtrees\AutoCompletePlaceLocation;
+
 use Fisharebest\Localization\Translation;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
 use Fisharebest\Webtrees\Module\ModuleMapAutocompleteInterface;
+use Fisharebest\Webtrees\Services\SearchService;
+use Fisharebest\Webtrees\Place;
+use Fisharebest\Webtrees\Tree;
+use Illuminate\Database\Capsule\Manager as DB;
+use Psr\Http\Message\ServerRequestInterface;
+
+
+
 
 /**
  * Class ExampleModule
@@ -22,18 +31,24 @@ use Fisharebest\Webtrees\Module\ModuleMapAutocompleteInterface;
  *
  * Modules *must* implement ModuleCustomInterface.  They *may* also implement other interfaces.
  */
-class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomInterface,ModuleMapAutocompleteInterface
+class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomInterface, ModuleMapAutocompleteInterface
 {
     // For every module interface that is implemented, the corresponding trait *should* also use be used.
-    use ModuleCustomTrait,ModuleMapAutocompleteInterface;
+    use ModuleCustomTrait, ModuleMapAutocompleteInterface;
+
+    private Tree $tree;
 
     /**
      * The constructor is called on all modules, even ones that are disabled.
      * Note that you cannot rely on other modules (such as languages) here, as they may not yet exist.
      *
+     * @param ServerRequestInterface $request
+     * @param SearchService    $search_service
      */
-    public function __construct()
+    public function __construct(ServerRequestInterface $request)
     {
+        $this->tree = $request->getAttribute('tree');
+        assert($this->tree instanceof Tree);
     }
 
     /**
@@ -139,8 +154,48 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
      *
      * @return array<string>
      */
-    public function searchPlaceNames(string $place):array{
-        return[];
+    public function searchPlaceNames(string $place): array
+    {
+        $query = DB::table('place_location AS p0')
+            ->leftJoin('place_location AS p1', 'p1.id', '=', 'p0.parent_id')
+            ->leftJoin('place_location AS p2', 'p2.id', '=', 'p1.parent_id')
+            ->leftJoin('place_location AS p3', 'p3.id', '=', 'p2.parent_id')
+            ->leftJoin('place_location AS p4', 'p4.id', '=', 'p3.parent_id')
+            ->leftJoin('place_location AS p5', 'p5.id', '=', 'p4.parent_id')
+            ->leftJoin('place_location AS p6', 'p6.id', '=', 'p5.parent_id')
+            ->leftJoin('place_location AS p7', 'p7.id', '=', 'p6.parent_id')
+            ->leftJoin('place_location AS p8', 'p8.id', '=', 'p7.parent_id')
+            ->orderBy('p0.place')
+            ->orderBy('p1.place')
+            ->orderBy('p2.place')
+            ->orderBy('p3.place')
+            ->orderBy('p4.place')
+            ->orderBy('p5.place')
+            ->orderBy('p6.place')
+            ->orderBy('p7.place')
+            ->orderBy('p8.place')
+            ->select([
+                'p0.place AS place0',
+                'p1.place AS place1',
+                'p2.place AS place2',
+                'p3.place AS place3',
+                'p4.place AS place4',
+                'p5.place AS place5',
+                'p6.place AS place6',
+                'p7.place AS place7',
+                'p8.place AS place8',
+            ]);
+        // Filter each level of the hierarchy.
+        foreach (explode(',', $place, 9) as $level => $string) {
+            $query->where('p' . $level . '.place', 'LIKE', '%' . addcslashes($string, '\\%_') . '%');
+        }
+        $plc=[];
+        foreach ($query->cursor() as $row){
+            $place = implode(', ', array_filter((array) $row));
+            $plc[] = new Place($place, $this->tree);
+        };
+        return $plc;
     }
+
 
 }
