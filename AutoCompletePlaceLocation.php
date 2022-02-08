@@ -14,14 +14,7 @@ use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
 use Fisharebest\Webtrees\Module\ModuleMapAutocompleteInterface;
-use Fisharebest\Webtrees\Services\SearchService;
-use Fisharebest\Webtrees\Place;
-use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
-use Psr\Http\Message\ServerRequestInterface;
-
-
-
 
 /**
  * Class ExampleModule
@@ -36,26 +29,31 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
     // For every module interface that is implemented, the corresponding trait *should* also use be used.
     use ModuleCustomTrait, ModuleMapAutocompleteInterface;
 
-    private Tree $tree;
-
     /**
      * The constructor is called on all modules, even ones that are disabled.
      * Note that you cannot rely on other modules (such as languages) here, as they may not yet exist.
      *
-     * @param ServerRequestInterface $request
-     * @param SearchService    $search_service
      */
-    public function __construct(ServerRequestInterface $request)
+    public function __construct()
     {
-        $this->tree = $request->getAttribute('tree');
-        assert($this->tree instanceof Tree);
+    }
+
+
+    /**
+     * Should this module be enabled when it is first installed?
+     *
+     * @return bool
+     */
+    public function isEnabledByDefault(): bool
+    {
+        return false;
     }
 
     /**
      * Bootstrap.  This function is called on *enabled* modules.
      * It is a good place to register routes and views.
      * Note that it is only called on genealogy pages - not on admin pages.
-     *
+     * 
      * @return void
      */
     public function boot(): void
@@ -79,7 +77,7 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
      */
     public function description(): string
     {
-        return I18N::translate('Allows autocomplete for places to search in place_location table');
+        return I18N::translate('Allows autocomplete of places by search in place_location table');
     }
 
     /**
@@ -136,8 +134,8 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
             case 'de-DE':
                 return [
                     // These are new translations:
-                    'AutoComplete places via PlaceLocation'                                  => 'AutoComplete places via PlaceLocation',
-                    'enables autocompletion for places to search in place_location table'    => 'Ermöglicht Autovervollständigung der Orte aus der place_location Tabelle',
+                    'AutoComplete places via PlaceLocation'                              => 'AutoComplete für Orte via PlaceLocation',
+                    'Allows autocomplete of places by search in place_location table'    => 'Ermöglicht Autovervollständigung der Orte aus der place_location Tabelle',
                 ];
 
             case 'some-other-language':
@@ -149,6 +147,7 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
                 return [];
         }
     }
+
     /**
      * @param string $place
      *
@@ -189,13 +188,10 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
         foreach (explode(',', $place, 9) as $level => $string) {
             $query->where('p' . $level . '.place', 'LIKE', '%' . addcslashes($string, '\\%_') . '%');
         }
-        $plc=[];
-        foreach ($query->cursor() as $row){
-            $place = implode(', ', array_filter((array) $row));
-            $plc[] = new Place($place, $this->tree);
+        $plc = [];
+        foreach ($query->cursor() as $row) {
+            $plc[] = (object)implode(', ', array_filter((array) $row));
         };
         return $plc;
     }
-
-
 }
