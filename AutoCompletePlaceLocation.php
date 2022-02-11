@@ -95,7 +95,7 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
      */
     public function customModuleVersion(): string
     {
-        return '0.1.2';
+        return '2.1.0-alpha2';
     }
 
     /**
