@@ -13,6 +13,7 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
+use Fisharebest\Webtrees\Module\ModuleMapAutocompleteTrait;
 use Fisharebest\Webtrees\Module\ModuleMapAutocompleteInterface;
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -27,7 +28,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomInterface, ModuleMapAutocompleteInterface
 {
     // For every module interface that is implemented, the corresponding trait *should* also use be used.
-    use ModuleCustomTrait, ModuleMapAutocompleteInterface;
+    use ModuleCustomTrait, ModuleMapAutocompleteTrait;
 
     /**
      * The constructor is called on all modules, even ones that are disabled.
@@ -97,7 +98,7 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
      */
     public function customModuleVersion(): string
     {
-        return '0.1.0';
+        return '0.1.1';
     }
 
     /**
@@ -190,7 +191,7 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
         }
         $plc = [];
         foreach ($query->cursor() as $row) {
-            $plc[] = (object)implode(', ', array_filter((array) $row));
+            $plc[] = implode(', ', array_filter((array) $row));
         };
         return $plc;
     }
