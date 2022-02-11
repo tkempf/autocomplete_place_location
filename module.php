@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Example module.
+ * Webtrees AutocompletePlaceLocation module.
  */
 
 declare(strict_types=1);

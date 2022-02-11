@@ -18,12 +18,9 @@ use Fisharebest\Webtrees\Module\ModuleMapAutocompleteInterface;
 use Illuminate\Database\Capsule\Manager as DB;
 
 /**
- * Class ExampleModule
+ * Class AutoCompletePlaceLocation
  *
- * This example shows how to create a custom module.
- * All the functions are optional.  Just implement the ones you need.
- *
- * Modules *must* implement ModuleCustomInterface.  They *may* also implement other interfaces.
+ * Modules *must* implement ModuleCustomInterface.  This module also implements ModuleMapAutocompleteInterface
  */
 class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomInterface, ModuleMapAutocompleteInterface
 {
@@ -98,7 +95,7 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
      */
     public function customModuleVersion(): string
     {
-        return '0.1.1';
+        return '0.1.2';
     }
 
     /**
@@ -139,10 +136,10 @@ class AutoCompletePlaceLocation extends AbstractModule implements ModuleCustomIn
                     'Allows autocomplete of places by search in place_location table'    => 'Ermöglicht Autovervollständigung der Orte aus der place_location Tabelle',
                 ];
 
-            case 'some-other-language':
+            //case 'some-other-language':
                 // Arrays are preferred, and are faster.
                 // If your module uses .MO files, then you can convert them to arrays like this.
-                return (new Translation('path/to/file.mo'))->asArray();
+                // return (new Translation('path/to/file.mo'))->asArray();
 
             default:
                 return [];
