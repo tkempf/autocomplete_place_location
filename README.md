@@ -1,19 +1,15 @@
-# EXAMPLE MODULE
+# AutoCompletePlaceLocation Module for Webtrees
 
-This example shows how to create a custom module.
+This module makes the autocomplete function for places to search the
+geographic data table place_location. This allows you to import geographic data
+i.e. from <https://webtrees.net/download/locations> via webtrees import function
+and delivers autocomplete propositions based on this data, which should help
+to keep the place records in your gedcom more consistent.
 
-All the functions are optional - edit the ones you need, and
-delete those that you do not need.
+Be aware, that the module could lead to the following privacy issue as stated by Greg in the forums: 
 
-For example, the functions regarding versions, author, support,
-etc. are only relevant for modules that you intend to share publicly.
+If you do not import geographic data, the wt_place_locations table contains all places from all trees 
+If you use it for auto-complete, then a user in one tree could find all the places in another (private) tree.
 
-This module does not actually do anything.  Look at the other examples to
-see how to add or change specific features.
+For installation, just copy the files to your modules_v4 folder and enable the module via Administration Interface
 
-## How to extend/modify an existing modules
-
-This example creates a new module from scratch (by extending `AbstractModule`).
-
-You can also create a module by extending an existing module.
-For an example of this, see <https://github.com/webtrees/example-module-theme>.
